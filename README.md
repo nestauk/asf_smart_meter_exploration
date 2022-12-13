@@ -8,6 +8,8 @@
   - Setup the conda environment
   - Configure `pre-commit`
 
+To save plots, follow the instructions [here](https://github.com/altair-viz/altair_saver/#nodejs).
+
 ## Contributor guidelines
 
 [Technical and working style guidelines](https://github.com/nestauk/ds-cookiecutter/blob/master/GUIDELINES.md)
