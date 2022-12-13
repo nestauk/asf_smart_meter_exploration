@@ -1,0 +1,5 @@
+# Change these at your peril:
+export PROJECT_NAME=asf_smart_meter_exploration
+export REPO_NAME=asf_smart_meter_exploration
+export DESCRIPTION=Exploratory analysis of smart meter data to inform future ASF projects
+export PROJECT_OPENNESS=public
