@@ -110,8 +110,7 @@ target/
 !/outputs/data/*.md
 /outputs/models/*
 !/outputs/models/*.md
-/outputs/figures/*.png
-/outputs/*.csv
+/outputs/figures/clusters/*.png
 /outputs/figures/inertia/*.png
 
 # Mac OS-specific storage files

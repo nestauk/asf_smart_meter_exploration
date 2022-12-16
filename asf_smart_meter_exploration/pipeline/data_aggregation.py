@@ -1,4 +1,4 @@
-# File: asf_smart_meter_exploration/pipeline/data_processing.py
+# File: asf_smart_meter_exploration/pipeline/data_aggregation.py
 """
 Functions to process household smart meter data into various formats for clustering.
 """
@@ -6,7 +6,7 @@ Functions to process household smart meter data into various formats for cluster
 import numpy as np
 import holidays
 
-from asf_smart_meter_exploration.getters.get_data import get_meter_data
+from asf_smart_meter_exploration.getters.get_processed_data import get_meter_data
 
 
 meter_data = get_meter_data()

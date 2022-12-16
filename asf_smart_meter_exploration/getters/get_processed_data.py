@@ -1,4 +1,4 @@
-# File: asf_smart_meter_exploration/getters/get_data.py
+# File: asf_smart_meter_exploration/getters/get_processed_data.py
 """
 Functions to get smart meter and household contextual data.
 """
@@ -12,7 +12,7 @@ meter_data_merged_file_path = config["meter_data_merged_file_path"]
 
 
 def get_household_data():
-    """Get all household contextual data (tariff and ACORN group).
+    """Get all household contextual data (tariff and Acorn group).
 
     Returns:
         pd.DataFrame: Household data.

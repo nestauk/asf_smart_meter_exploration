@@ -2,17 +2,19 @@
 """
 Script to perform clustering on variants of the smart meter data.
 For each cluster, plots of the counts and the distribution of
-tariffs / ACORN groups in each cluster are produced and saved.
+tariffs / Acorn groups in each cluster are produced and saved.
 """
 
 from asf_smart_meter_exploration.utils.clustering_utils import run_clustering
 from asf_smart_meter_exploration.utils.plotting_utils import *
-from asf_smart_meter_exploration.pipeline.data_processing import *
+from asf_smart_meter_exploration.pipeline.data_aggregation import *
 
 # Dictionary of variants to cluster and plot.
 # "df" is the smart meter dataframe, "k" is the number of clusters,
-# and see docs for `plot_observations_and_clusters` (in `plotting_utils`)
+# and see docs for `plot_observations_and_clusters` (in `utils/plotting_utils.py`)
 # for other parameters.
+# Values of k here were chosen after analysing plots produced in
+# `analysis/inertia_plots.py`.
 options_dict = {
     "total_usage": {
         "df": get_average_usage(),

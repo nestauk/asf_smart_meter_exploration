@@ -10,15 +10,15 @@ import matplotlib.patheffects as pe
 import matplotlib.ticker as mtick
 import datetime
 
-from asf_smart_meter_exploration.getters.get_data import get_household_data
+from asf_smart_meter_exploration.getters.get_processed_data import get_household_data
 from asf_smart_meter_exploration import config
 
-plot_output_folder_path = config["plot_output_folder_path"]
+cluster_plot_folder_path = config["cluster_plot_folder_path"]
 plot_suffix = config["plot_suffix"]
 
 
 def merge_household_data(usage_data):
-    """Merge household contextual data (tariff and ACORN group) onto usage dataframe.
+    """Merge household contextual data (tariff and Acorn group) onto usage dataframe.
 
     Args:
         usage_data (pd.DataFrame): Smart meter data where index is household ID.
@@ -110,7 +110,7 @@ def plot_observations_and_clusters(
     ax.locator_params(axis="y", nbins=4)
 
     plt.savefig(
-        plot_output_folder_path + filename_infix + "_observations" + plot_suffix
+        cluster_plot_folder_path + filename_infix + "_observations" + plot_suffix
     )
 
 
@@ -137,7 +137,9 @@ def plot_cluster_counts(data, clusters, filename_infix):
 
     counts_plot = set_plot_properties(counts_plot)
 
-    counts_plot.save(plot_output_folder_path + filename_infix + "_counts" + plot_suffix)
+    counts_plot.save(
+        cluster_plot_folder_path + filename_infix + "_counts" + plot_suffix
+    )
 
 
 def plot_tariff_cluster_distribution(data, clusters, filename_infix):
@@ -187,11 +189,13 @@ def plot_tariff_cluster_distribution(data, clusters, filename_infix):
 
     tariff_plot = set_plot_properties(tariff_plot)
 
-    tariff_plot.save(plot_output_folder_path + filename_infix + "_tariff" + plot_suffix)
+    tariff_plot.save(
+        cluster_plot_folder_path + filename_infix + "_tariff" + plot_suffix
+    )
 
 
 def plot_acorn_cluster_distribution(data, clusters, filename_infix):
-    """Produce proportional stacked bar chart of proportions of ACORN groups in each cluster.
+    """Produce proportional stacked bar chart of proportions of Acorn groups in each cluster.
 
     Args:
         data (pd.DataFrame): Household usage data.
@@ -238,4 +242,4 @@ def plot_acorn_cluster_distribution(data, clusters, filename_infix):
 
     acorn_plot = set_plot_properties(acorn_plot)
 
-    acorn_plot.save(plot_output_folder_path + filename_infix + "_acorn" + plot_suffix)
+    acorn_plot.save(cluster_plot_folder_path + filename_infix + "_acorn" + plot_suffix)
