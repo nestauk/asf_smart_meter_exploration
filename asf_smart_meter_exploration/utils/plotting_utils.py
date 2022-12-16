@@ -1,3 +1,8 @@
+# File: asf_smart_meter_exploration/utils/plotting_utils.py
+"""
+Reusable functions for plotting.
+"""
+
 import pandas as pd
 import altair as alt
 import matplotlib.pyplot as plt
@@ -13,7 +18,14 @@ plot_suffix = config["plot_suffix"]
 
 
 def merge_household_data(usage_data):
+    """Merge household contextual data (tariff and ACORN group) onto usage dataframe.
 
+    Args:
+        usage_data (pd.DataFrame): Smart meter data where index is household ID.
+
+    Returns:
+        pd.DataFrame: Merged household usage and contextual data.
+    """
     household_data = get_household_data()
 
     merged_data = usage_data.reset_index().merge(
@@ -24,6 +36,14 @@ def merge_household_data(usage_data):
 
 
 def set_plot_properties(chart):
+    """Set custom size, font and colour properties for an Altair chart.
+
+    Args:
+        chart (alt.Chart): Any Altair chart.
+
+    Returns:
+        alt.Chart: Chart with adjusted properties.
+    """
     return (
         chart.properties(width=800, height=300)
         .configure_axis(labelFontSize=20, titleFontSize=20)
@@ -41,14 +61,31 @@ def plot_observations_and_clusters(
     ymin=0,
     ymax=0.2,
 ):
+    """Produce and save plot featuring all household usage lines and thicker lines denoting clusters.
 
+    Args:
+        data (pd.DataFrame): Household usage data.
+        clusters (list): Cluster designations.
+        filename_infix (str): Description of variant (e.g. "normalised_usage").
+            Appears in filename and plot title.
+        normalised (bool, optional): Whether the measure has been normalised
+            (determines whether or not to display y axis as a percentage).
+            Defaults to True.
+        ylabel (str, optional): y axis label. Defaults to "Electricity usage (normalised)".
+        ymin (int, optional): Minimum value on y axis. Defaults to 0.
+        ymax (float, optional): Maximum value on y axis. Defaults to 0.2.
+    """
+    # Using matplotlib here due to issues with how Altair deals with times
+    # Line below makes times work
     pd.plotting.register_matplotlib_converters()
 
     fig, ax = plt.subplots()
 
+    # Plot individual lines with high transparency
     for i in range(len(clusters)):
         ax.plot(data.iloc[i], alpha=0.05, color=f"C{clusters[i]}")
 
+    # Plot cluster lines, thicker and opaque with borders
     for i in range(max(clusters) + 1):
         cluster_average = data.loc[clusters == i].mean()
         ax.plot(
@@ -78,7 +115,14 @@ def plot_observations_and_clusters(
 
 
 def plot_cluster_counts(data, clusters, filename_infix):
+    """Produce bar chart of numbers of households in each cluster.
 
+    Args:
+        data (pd.DataFrame): Household usage data.
+        clusters (list): Cluster designations.
+        filename_infix (str): Description of variant (e.g. "normalised_usage").
+            Appears in filename.
+    """
     data["cluster"] = clusters
     counts = data["cluster"].value_counts().reset_index(name="count")
 
@@ -97,7 +141,14 @@ def plot_cluster_counts(data, clusters, filename_infix):
 
 
 def plot_tariff_cluster_distribution(data, clusters, filename_infix):
+    """Produce proportional stacked bar chart of proportions of tariff types in each cluster.
 
+    Args:
+        data (pd.DataFrame): Household usage data.
+        clusters (list): Cluster designations.
+        filename_infix (str): Description of variant (e.g. "normalised_usage").
+            Appears in filename.
+    """
     data["cluster"] = clusters
     merged_data = merge_household_data(data)
 
@@ -140,7 +191,14 @@ def plot_tariff_cluster_distribution(data, clusters, filename_infix):
 
 
 def plot_acorn_cluster_distribution(data, clusters, filename_infix):
+    """Produce proportional stacked bar chart of proportions of ACORN groups in each cluster.
 
+    Args:
+        data (pd.DataFrame): Household usage data.
+        clusters (list): Cluster designations.
+        filename_infix (str): Description of variant (e.g. "normalised_usage").
+            Appears in filename.
+    """
     data["cluster"] = clusters
     merged_data = merge_household_data(data)
 

@@ -10,6 +10,10 @@
 
 To save plots, follow the instructions [here](https://github.com/altair-viz/altair_saver/#nodejs).
 
+Instructions for downloading data:
+
+- `make inputs-pull` puts a zip file in `/inputs`, script will unzip if not already
+
 ## Contributor guidelines
 
 [Technical and working style guidelines](https://github.com/nestauk/ds-cookiecutter/blob/master/GUIDELINES.md)

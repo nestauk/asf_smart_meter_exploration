@@ -1,7 +1,18 @@
+# File: asf_smart_meter_exploration/analysis/clustering.py
+"""
+Script to perform clustering on variants of the smart meter data.
+For each cluster, plots of the counts and the distribution of
+tariffs / ACORN groups in each cluster are produced and saved.
+"""
+
 from asf_smart_meter_exploration.utils.clustering_utils import run_clustering
 from asf_smart_meter_exploration.utils.plotting_utils import *
 from asf_smart_meter_exploration.pipeline.data_processing import *
 
+# Dictionary of variants to cluster and plot.
+# "df" is the smart meter dataframe, "k" is the number of clusters,
+# and see docs for `plot_observations_and_clusters` (in `plotting_utils`)
+# for other parameters.
 options_dict = {
     "total_usage": {
         "df": get_average_usage(),
@@ -71,13 +82,26 @@ options_dict = {
 
 
 def cluster_and_plot(type):
+    """Cluster and plot an entry in the variants dictionary.
+
+    Args:
+        type (str): Name of variant.
+
+    Raises:
+        ValueError: if `type` is not one of the dictionary keys.
+    """
     if type not in options_dict.keys():
         raise ValueError(type + " is not implemented.")
     else:
         type_dict = options_dict[type]
+
         df = type_dict["df"]
         k = type_dict["k"]
+
         clusters = run_clustering(df, k)
+
+        # Create and save cluster plots using the parameters from the dict
+        # Use variant name as part of filename
         plot_observations_and_clusters(
             df,
             clusters,

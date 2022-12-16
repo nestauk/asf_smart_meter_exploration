@@ -1,24 +1,53 @@
+# File: asf_smart_meter_exploration/utils/clustering_utils.py
+"""
+Reusable functions for clustering.
+"""
+
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
+from asf_smart_meter_exploration import config
 
-def cluster_numbers_plot(data, n=10):
+inertia_plot_folder_path = config["inertia_plot_folder_path"]
+plot_suffix = config["plot_suffix"]
 
-    # Run clustering for a range of values of k and calculate within-cluster sum of squared errors
-    wcss = []
+
+def inertia_plot(data, filename, n=10):
+    """Run k-means clustering on data for k between 1 and 10
+    and plot inertia (elbow plot) for each k to inform final choice of k.
+
+    Args:
+        data (pd.DataFrame): Dataframe structured with households as rows and
+            columns for each half hour.
+        n (int, optional): Max k to try. Defaults to 10.
+    """
+
+    inertias = []
 
     for i in range(1, n + 1):
         kmeans = KMeans(n_clusters=i)
         kmeans.fit(data)
-        wcss.append(kmeans.inertia_)
+        inertias.append(kmeans.inertia_)
 
-    plt.plot(range(1, n + 1), wcss)
+    plt.plot(range(1, n + 1), inertias)
     plt.xlabel("Number of clusters")
     plt.ylabel("Within-cluster sum of squared errors")
-    plt.show()
+    plt.title("Inertia plot for " + filename)
+    plt.savefig(inertia_plot_folder_path + filename + "_inertia" + plot_suffix)
+    plt.clf()
 
 
 def run_clustering(data, k=3):
+    """Perform k-means clustering with specified value of k.
+
+    Args:
+        data (pd.DataFrame): Dataframe structured with households as rows and
+            columns for each half hour.
+        k (int, optional): Number of clusters. Defaults to 3.
+
+    Returns:
+        list: Cluster assignments for each row of `data`.
+    """
 
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(data)

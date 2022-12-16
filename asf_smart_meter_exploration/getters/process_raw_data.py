@@ -1,4 +1,8 @@
-# code adapted from https://www.kaggle.com/code/patrick0302/buildsys22-tutorial-0-data-preparation
+# File: asf_smart_meter_exploration/getters/process_raw_data.py
+"""
+Script to process raw smart meter data file and produce half-hourly electricity readings for each household.
+Code adapted from https://www.kaggle.com/code/patrick0302/buildsys22-tutorial-0-data-preparation
+"""
 
 import pandas as pd
 import numpy as np
@@ -14,10 +18,18 @@ meter_data_merged_file_path = config["meter_data_merged_file_path"]
 
 
 def produce_all_properties_df():
-
+    """Process raw data (split into subfolders) and save as a single CSV file."""
+    # If output folder does not exist, assume not unzipped
     if ~os.path.isdir(meter_data_folder_path):
-        with zipfile.ZipFile(meter_data_zip_path, "r") as zip_ref:
-            zip_ref.extractall("inputs")
+        if ~os.path.isdir(meter_data_zip_path):
+            raise FileNotFoundError(
+                "Neither raw data folder nor zip file were found. Please check file location or redownload data from S3."
+            )
+        else:
+            print("Unzipping...")
+            with zipfile.ZipFile(meter_data_zip_path, "r") as zip_ref:
+                zip_ref.extractall("inputs")
+            print("Unzipped!")
 
     halfhourly_dataset = []
 
@@ -35,6 +47,7 @@ def produce_all_properties_df():
 
     halfhourly_dataset = pd.concat(halfhourly_dataset, axis=0)
 
+    # Structure dataframe so that index is timestamps and columns are households
     df_output = (
         halfhourly_dataset.groupby(["tstp", "LCLid"])["energy(kWh/hh)"].mean().unstack()
     )
