@@ -58,6 +58,19 @@ outputs/
 │  ├─ electricity_data.csv - merged and processed smart meter data
 ```
 
+## Dependency map
+
+```mermaid
+  graph TD;
+      getters/process_daw_data.py;
+      getters/get_processed_data.py-->pipeline/data_aggregation.py;
+      pipeline/data_aggregation.py-->analysis/clustering.py;
+      pipeline/data_aggregation.py-->analysis/inertia_plots.py;
+      utils/clustering_utils.py-->analysis/clustering.py;
+      utils/plotting_utils.py-->analysis/clustering.py;
+      utils/plotting_utils.py-->analysis/inertia_plots.py;
+```
+
 ## Contributor guidelines
 
 [Technical and working style guidelines](https://github.com/nestauk/ds-cookiecutter/blob/master/GUIDELINES.md)
