@@ -6,7 +6,10 @@ Functions to process household smart meter data into various formats for cluster
 import numpy as np
 import holidays
 
-from asf_smart_meter_exploration.getters.get_processed_data import get_meter_data
+from asf_smart_meter_exploration.getters.get_processed_data import (
+    get_meter_data,
+    get_household_data,
+)
 
 
 meter_data = get_meter_data()
@@ -85,21 +88,22 @@ def get_average_usage_daytypes(meter_data=meter_data, normalise=False):
 
 
 def get_daytype_diff(type="diff"):
-    """For each household, get difference or ratio between weekday and weekend usage
-    for each half-hour of the day.
+    """For each household, get difference or ratio between weekend and weekday usage
+    for each half-hour of the day. ("Weekend" also includes bank holidays.)
 
     Args:
         type (str, optional): Whether to calculate difference ("diff") or ratio ("ratio").
-        "diff" is weekday - weekend, "ratio" is weekday / weekend.
+        "diff" is weekend - weekday, "ratio" is weekend / weekday.
         Defaults to "diff".
 
     Returns:
-        pd.DataFrame: Average differences/ratios between usage on weekdays and weekends.
+        pd.DataFrame: Average differences/ratios between usage on weekends and weekdays.
     """
 
     meter_data_daytypes = get_average_usage_daytypes()
 
     if type == "diff":
+        # True = "weekend or bank holiday"
         return (meter_data_daytypes[True] - meter_data_daytypes[False]).dropna(axis=0)
     elif type == "ratio":
         return (
@@ -148,3 +152,21 @@ def get_season_diff(meter_data=meter_data, season_1="winter", season_2="summer")
         seasonal_diff = (seasonal_aves.loc[season_dict[season_1]] - spring_autumn_ave).T
 
     return seasonal_diff
+
+
+def merge_household_data(usage_data):
+    """Merge household contextual data (tariff and Acorn group) onto usage dataframe.
+
+    Args:
+        usage_data (pd.DataFrame): Smart meter data where index is household ID.
+
+    Returns:
+        pd.DataFrame: Merged household usage and contextual data.
+    """
+    household_data = get_household_data()
+
+    merged_data = usage_data.reset_index().merge(
+        household_data, left_on="index", right_on="LCLid"
+    )[["index", "cluster", "stdorToU", "Acorn_grouped"]]
+
+    return merged_data

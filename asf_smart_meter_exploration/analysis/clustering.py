@@ -36,7 +36,7 @@ options_dict = {
         "df": get_daytype_diff(),
         "k": 3,
         "normalised": False,
-        "ylabel": "Mean weekday usage - mean weekend usage (kWh)",
+        "ylabel": "Mean weekend usage - mean weekday usage (kWh)",
         "ymin": -1,
         "ymax": 1,
     },
@@ -44,7 +44,7 @@ options_dict = {
         "df": get_daytype_diff(type="ratio"),
         "k": 2,
         "normalised": False,
-        "ylabel": "Mean weekday usage / mean weekend usage",
+        "ylabel": "Mean weekend usage / mean weekday usage",
         "ymin": 0,
         "ymax": 10,
     },
@@ -56,13 +56,13 @@ options_dict = {
         "ymin": -1,
         "ymax": 4,
     },
-    "winter_rest_diff": {
-        "df": get_season_diff(season_2="spring and autumn"),
+    "summer_rest_diff": {
+        "df": get_season_diff(season_1="summer", season_2="spring and autumn"),
         "k": 4,
         "normalised": False,
-        "ylabel": "Mean winter usage - mean spring/autumn usage (kWh)",
-        "ymin": -1,
-        "ymax": 4,
+        "ylabel": "Mean summer usage - mean spring/autumn usage (kWh)",
+        "ymin": -2,
+        "ymax": 1,
     },
     "summer_rest_diff": {
         "df": get_season_diff(season_1="summer", season_2="spring and autumn"),
@@ -113,9 +113,15 @@ def cluster_and_plot(type):
             ymin=type_dict["ymin"],
             ymax=type_dict["ymax"],
         )
+
         plot_cluster_counts(df, clusters, filename_infix=type)
-        plot_tariff_cluster_distribution(df, clusters, filename_infix=type)
-        plot_acorn_cluster_distribution(df, clusters, filename_infix=type)
+
+        # Attach cluster column and merge household data for plotting distributions
+        df["cluster"] = clusters
+        merged_df = merge_household_data(df)
+
+        plot_tariff_cluster_distribution(merged_df, filename_infix=type)
+        plot_acorn_cluster_distribution(merged_df, filename_infix=type)
 
 
 if __name__ == "__main__":

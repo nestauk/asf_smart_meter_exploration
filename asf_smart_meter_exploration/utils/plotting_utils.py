@@ -10,29 +10,10 @@ import matplotlib.patheffects as pe
 import matplotlib.ticker as mtick
 import datetime
 
-from asf_smart_meter_exploration.getters.get_processed_data import get_household_data
 from asf_smart_meter_exploration import config
 
 cluster_plot_folder_path = config["cluster_plot_folder_path"]
 plot_suffix = config["plot_suffix"]
-
-
-def merge_household_data(usage_data):
-    """Merge household contextual data (tariff and Acorn group) onto usage dataframe.
-
-    Args:
-        usage_data (pd.DataFrame): Smart meter data where index is household ID.
-
-    Returns:
-        pd.DataFrame: Merged household usage and contextual data.
-    """
-    household_data = get_household_data()
-
-    merged_data = usage_data.reset_index().merge(
-        household_data, left_on="index", right_on="LCLid"
-    )[["index", "cluster", "stdorToU", "Acorn_grouped"]]
-
-    return merged_data
 
 
 def set_plot_properties(chart):
@@ -81,6 +62,8 @@ def plot_observations_and_clusters(
 
     fig, ax = plt.subplots()
 
+    fig.set_size_inches(12, 6)
+
     # Plot individual lines with high transparency
     for i in range(len(clusters)):
         ax.plot(data.iloc[i], alpha=0.05, color=f"C{clusters[i]}")
@@ -110,7 +93,8 @@ def plot_observations_and_clusters(
     ax.locator_params(axis="y", nbins=4)
 
     plt.savefig(
-        cluster_plot_folder_path + filename_infix + "_observations" + plot_suffix
+        cluster_plot_folder_path + filename_infix + "_observations" + plot_suffix,
+        dpi=100,
     )
 
 
@@ -142,17 +126,16 @@ def plot_cluster_counts(data, clusters, filename_infix):
     )
 
 
-def plot_tariff_cluster_distribution(data, clusters, filename_infix):
+def plot_tariff_cluster_distribution(merged_data, filename_infix):
     """Produce proportional stacked bar chart of proportions of tariff types in each cluster.
 
     Args:
-        data (pd.DataFrame): Household usage data.
+        merged_data (pd.DataFrame): Household usage data with "cluster" column,
+            merged with household characteristics.
         clusters (list): Cluster designations.
         filename_infix (str): Description of variant (e.g. "normalised_usage").
             Appears in filename.
     """
-    data["cluster"] = clusters
-    merged_data = merge_household_data(data)
 
     cluster_tariff_counts = (
         pd.crosstab(merged_data.cluster, merged_data.stdorToU)
@@ -194,18 +177,16 @@ def plot_tariff_cluster_distribution(data, clusters, filename_infix):
     )
 
 
-def plot_acorn_cluster_distribution(data, clusters, filename_infix):
+def plot_acorn_cluster_distribution(merged_data, filename_infix):
     """Produce proportional stacked bar chart of proportions of Acorn groups in each cluster.
 
     Args:
-        data (pd.DataFrame): Household usage data.
+        merged_data (pd.DataFrame): Household usage data with "cluster" column,
+            merged with household characteristics.
         clusters (list): Cluster designations.
         filename_infix (str): Description of variant (e.g. "normalised_usage").
             Appears in filename.
     """
-    data["cluster"] = clusters
-    merged_data = merge_household_data(data)
-
     cluster_acorn_counts = pd.crosstab(merged_data.cluster, merged_data.Acorn_grouped)
     cluster_acorn_counts["Other"] = (
         cluster_acorn_counts["ACORN-"] + cluster_acorn_counts["ACORN-U"]

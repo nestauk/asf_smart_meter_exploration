@@ -10,6 +10,7 @@ from asf_smart_meter_exploration import config
 
 inertia_plot_folder_path = config["inertia_plot_folder_path"]
 plot_suffix = config["plot_suffix"]
+random_state = config["random_state"]
 
 
 def inertia_plot(data, filename, n=10):
@@ -25,7 +26,7 @@ def inertia_plot(data, filename, n=10):
     inertias = []
 
     for i in range(1, n + 1):
-        kmeans = KMeans(n_clusters=i)
+        kmeans = KMeans(n_clusters=i, random_state=random_state)
         kmeans.fit(data)
         inertias.append(kmeans.inertia_)
 
@@ -49,7 +50,7 @@ def run_clustering(data, k=3):
         list: Cluster assignments for each row of `data`.
     """
 
-    kmeans = KMeans(n_clusters=k)
+    kmeans = KMeans(n_clusters=k, random_state=random_state)
     kmeans.fit(data)
 
     clusters = kmeans.predict(data)
