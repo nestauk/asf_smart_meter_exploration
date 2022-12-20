@@ -10,10 +10,10 @@ import matplotlib.patheffects as pe
 import matplotlib.ticker as mtick
 import datetime
 
-from asf_smart_meter_exploration import config
+from asf_smart_meter_exploration import config, PROJECT_DIR
 
-cluster_plot_folder_path = config["cluster_plot_folder_path"]
-plot_suffix = config["plot_suffix"]
+cluster_plot_folder_path = PROJECT_DIR / config["cluster_plot_folder_path"]
+plot_suffix = PROJECT_DIR / config["plot_suffix"]
 
 
 def set_plot_properties(chart):

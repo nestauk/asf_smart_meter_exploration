@@ -10,18 +10,18 @@ import tqdm
 import os
 import zipfile
 
-from asf_smart_meter_exploration import config
+from asf_smart_meter_exploration import config, PROJECT_DIR
 
-meter_data_zip_path = config["meter_data_zip_path"]
-meter_data_folder_path = config["meter_data_folder_path"]
-meter_data_merged_file_path = config["meter_data_merged_file_path"]
+meter_data_zip_path = PROJECT_DIR / config["meter_data_zip_path"]
+meter_data_folder_path = PROJECT_DIR / config["meter_data_folder_path"]
+meter_data_merged_file_path = PROJECT_DIR / config["meter_data_merged_file_path"]
 
 
 def produce_all_properties_df():
     """Process raw data (split into subfolders) and save as a single CSV file."""
     # If output folder does not exist, assume not unzipped
-    if ~os.path.isdir(meter_data_folder_path):
-        if ~os.path.isdir(meter_data_zip_path):
+    if not os.path.isdir(meter_data_folder_path):
+        if not os.path.isfile(meter_data_zip_path):
             raise FileNotFoundError(
                 "Neither raw data folder nor zip file were found. Please check file location or redownload data from S3."
             )

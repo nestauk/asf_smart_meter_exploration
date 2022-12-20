@@ -6,11 +6,11 @@ Reusable functions for clustering.
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
-from asf_smart_meter_exploration import config
+from asf_smart_meter_exploration import config, PROJECT_DIR
 
-inertia_plot_folder_path = config["inertia_plot_folder_path"]
-plot_suffix = config["plot_suffix"]
-random_state = config["random_state"]
+inertia_plot_folder_path = PROJECT_DIR / config["inertia_plot_folder_path"]
+plot_suffix = PROJECT_DIR / config["plot_suffix"]
+random_state = PROJECT_DIR / config["random_state"]
 
 
 def inertia_plot(data, filename, n=10):
