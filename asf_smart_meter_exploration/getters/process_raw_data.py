@@ -49,7 +49,9 @@ def produce_all_properties_df():
 
     # Structure dataframe so that index is timestamps and columns are households
     df_output = (
-        halfhourly_dataset.groupby(["tstp", "LCLid"])["energy(kWh/hh)"].mean().unstack()
+        halfhourly_dataset.groupby(["tstp", "LCLid"])["energy(kWh/hh)"]
+        .mean(numeric_only=True)
+        .unstack()
     )
     df_output.to_csv(meter_data_merged_file_path)
 

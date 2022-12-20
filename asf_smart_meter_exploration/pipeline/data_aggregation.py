@@ -30,7 +30,7 @@ def get_average_usage(meter_data=meter_data, normalised=False, cumulative=False)
         pd.DataFrame: Average usage data.
     """
 
-    hh_averages = meter_data.groupby("time").mean().dropna(axis=1).T
+    hh_averages = meter_data.groupby("time").mean(numeric_only=True).dropna(axis=1).T
 
     if normalised:
         hh_averages = hh_averages.div(hh_averages.sum(axis=1), axis=0).dropna(axis=0)
@@ -75,7 +75,10 @@ def get_average_usage_daytypes(meter_data=meter_data, normalise=False):
 
     # Calculate means for each half-hour and day type pair
     meter_data_daytypes = (
-        meter_data.groupby(["weekend_or_bank_holiday", "time"]).mean().dropna(axis=1).T
+        meter_data.groupby(["weekend_or_bank_holiday", "time"])
+        .mean(numeric_only=True)
+        .dropna(axis=1)
+        .T
     )
 
     if normalise:
@@ -140,7 +143,9 @@ def get_season_diff(meter_data=meter_data, season_1="winter", season_2="summer")
     meter_data["season"] = (
         meter_data.tstp.dt.month // 3 % 4
     )  # quick way of getting season number
-    seasonal_aves = meter_data.groupby(["season", "time"]).mean().dropna(axis=1)
+    seasonal_aves = (
+        meter_data.groupby(["season", "time"]).mean(numeric_only=True).dropna(axis=1)
+    )
 
     if season_2 != "spring and autumn":
         seasonal_diff = (

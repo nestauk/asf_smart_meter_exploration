@@ -13,7 +13,7 @@ import datetime
 from asf_smart_meter_exploration import config, PROJECT_DIR
 
 cluster_plot_folder_path = PROJECT_DIR / config["cluster_plot_folder_path"]
-plot_suffix = PROJECT_DIR / config["plot_suffix"]
+plot_suffix = config["plot_suffix"]
 
 
 def set_plot_properties(chart):
@@ -70,7 +70,7 @@ def plot_observations_and_clusters(
 
     # Plot cluster lines, thicker and opaque with borders
     for i in range(max(clusters) + 1):
-        cluster_average = data.loc[clusters == i].mean()
+        cluster_average = data.loc[clusters == i].mean(numeric_only=True)
         ax.plot(
             cluster_average,
             lw=3,
@@ -93,9 +93,10 @@ def plot_observations_and_clusters(
     ax.locator_params(axis="y", nbins=4)
 
     plt.savefig(
-        cluster_plot_folder_path + filename_infix + "_observations" + plot_suffix,
+        cluster_plot_folder_path / (filename_infix + "_observations" + plot_suffix),
         dpi=100,
     )
+    plt.clf()
 
 
 def plot_cluster_counts(data, clusters, filename_infix):
@@ -122,7 +123,7 @@ def plot_cluster_counts(data, clusters, filename_infix):
     counts_plot = set_plot_properties(counts_plot)
 
     counts_plot.save(
-        cluster_plot_folder_path + filename_infix + "_counts" + plot_suffix
+        cluster_plot_folder_path / (filename_infix + "_counts" + plot_suffix)
     )
 
 
@@ -173,7 +174,7 @@ def plot_tariff_cluster_distribution(merged_data, filename_infix):
     tariff_plot = set_plot_properties(tariff_plot)
 
     tariff_plot.save(
-        cluster_plot_folder_path + filename_infix + "_tariff" + plot_suffix
+        cluster_plot_folder_path / (filename_infix + "_tariff" + plot_suffix)
     )
 
 
@@ -223,4 +224,6 @@ def plot_acorn_cluster_distribution(merged_data, filename_infix):
 
     acorn_plot = set_plot_properties(acorn_plot)
 
-    acorn_plot.save(cluster_plot_folder_path + filename_infix + "_acorn" + plot_suffix)
+    acorn_plot.save(
+        cluster_plot_folder_path / (filename_infix + "_acorn" + plot_suffix)
+    )

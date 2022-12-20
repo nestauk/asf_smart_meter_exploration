@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 from asf_smart_meter_exploration import config, PROJECT_DIR
 
 inertia_plot_folder_path = PROJECT_DIR / config["inertia_plot_folder_path"]
-plot_suffix = PROJECT_DIR / config["plot_suffix"]
-random_state = PROJECT_DIR / config["random_state"]
+plot_suffix = config["plot_suffix"]
+random_state = config["random_state"]
 
 
 def inertia_plot(data, filename, n=10):
@@ -26,7 +26,7 @@ def inertia_plot(data, filename, n=10):
     inertias = []
 
     for i in range(1, n + 1):
-        kmeans = KMeans(n_clusters=i, random_state=random_state)
+        kmeans = KMeans(n_clusters=i, random_state=random_state, n_init=10)
         kmeans.fit(data)
         inertias.append(kmeans.inertia_)
 
@@ -34,7 +34,7 @@ def inertia_plot(data, filename, n=10):
     plt.xlabel("Number of clusters")
     plt.ylabel("Within-cluster sum of squared errors")
     plt.title("Inertia plot for " + filename)
-    plt.savefig(inertia_plot_folder_path + filename + "_inertia" + plot_suffix)
+    plt.savefig(inertia_plot_folder_path / (filename + "_inertia" + plot_suffix))
     plt.clf()
 
 
@@ -50,7 +50,7 @@ def run_clustering(data, k=3):
         list: Cluster assignments for each row of `data`.
     """
 
-    kmeans = KMeans(n_clusters=k, random_state=random_state)
+    kmeans = KMeans(n_clusters=k, random_state=random_state, n_init=10)
     kmeans.fit(data)
 
     clusters = kmeans.predict(data)
