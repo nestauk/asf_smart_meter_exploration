@@ -33,7 +33,9 @@ def produce_all_properties_df():
 
     halfhourly_dataset = pd.DataFrame()
 
-    for file_name in tqdm.tqdm(os.listdir(meter_data_folder_path)):
+    print("Processing the data...")
+    folder_names = os.listdir(meter_data_folder_path)
+    for file_name in tqdm.tqdm(folder_names):
         df_temp = pd.read_csv(
             os.path.join(meter_data_folder_path, file_name),
             index_col="tstp",
