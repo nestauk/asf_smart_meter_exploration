@@ -47,7 +47,7 @@ def produce_all_properties_df():
         df_temp["energy(kWh/hh)"] = df_temp["energy(kWh/hh)"].astype("float")
         halfhourly_dataset = pd.concat([halfhourly_dataset, df_temp])
 
-    # Structure dataframe so that index is timestamps and columns are households
+    # Structure dataframe so that index is timestamps and columns are households (originally in the LCLid variable)
     df_output = (
         halfhourly_dataset.groupby(["tstp", "LCLid"])["energy(kWh/hh)"]
         .mean(numeric_only=True)
