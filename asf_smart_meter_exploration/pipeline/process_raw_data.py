@@ -1,4 +1,4 @@
-# File: asf_smart_meter_exploration/getters/process_raw_data.py
+# File: asf_smart_meter_exploration/pipeline/process_raw_data.py
 """
 Script to process raw smart meter data file and produce half-hourly electricity readings for each household.
 Code adapted from https://www.kaggle.com/code/patrick0302/buildsys22-tutorial-0-data-preparation
@@ -10,26 +10,30 @@ import tqdm
 import os
 import zipfile
 
-from asf_smart_meter_exploration import config, PROJECT_DIR
+from asf_smart_meter_exploration import base_config, PROJECT_DIR
 
-meter_data_zip_path = PROJECT_DIR / config["meter_data_zip_path"]
-meter_data_folder_path = PROJECT_DIR / config["meter_data_folder_path"]
-meter_data_merged_file_path = PROJECT_DIR / config["meter_data_merged_file_path"]
+meter_data_zip_path = PROJECT_DIR / base_config["meter_data_zip_path"]
+meter_data_folder_path = PROJECT_DIR / base_config["meter_data_folder_path"]
+meter_data_merged_file_path = PROJECT_DIR / base_config["meter_data_merged_file_path"]
+
+
+def unzip_raw_data():
+    """Unzips the raw data file."""
+    if not os.path.isdir(meter_data_zip_path):
+        raise FileNotFoundError(
+            "Zip file not found. Please check file location or redownload data from S3."
+        )
+    else:
+        with zipfile.ZipFile(meter_data_zip_path, "r") as zip_ref:
+            zip_ref.extractall("inputs")
+        print("Unzipped!")
 
 
 def produce_all_properties_df():
     """Process raw data (split into subfolders) and save as a single CSV file."""
-    # If output folder does not exist, assume not unzipped
     if not os.path.isdir(meter_data_folder_path):
-        if not os.path.isfile(meter_data_zip_path):
-            raise FileNotFoundError(
-                "Neither raw data folder nor zip file were found. Please check file location or redownload data from S3."
-            )
-        else:
-            print("Unzipping...")
-            with zipfile.ZipFile(meter_data_zip_path, "r") as zip_ref:
-                zip_ref.extractall("inputs")
-            print("Unzipped!")
+        print("Unzipped folder not found. Unzipping...")
+        unzip_raw_data()
 
     halfhourly_dataset = pd.DataFrame()
 
@@ -43,7 +47,7 @@ def produce_all_properties_df():
             low_memory=False,
         )
         df_temp["file_name"] = file_name.split(".")[0]
-        df_temp = df_temp.replace("Null", np.nan).dropna()
+        df_temp = df_temp.replace("Null", np.nan)
         df_temp["energy(kWh/hh)"] = df_temp["energy(kWh/hh)"].astype("float")
         halfhourly_dataset = pd.concat([halfhourly_dataset, df_temp])
 

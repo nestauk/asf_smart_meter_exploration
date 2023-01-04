@@ -5,10 +5,10 @@ Functions to get smart meter and household contextual data.
 
 import pandas as pd
 
-from asf_smart_meter_exploration import config, PROJECT_DIR
+from asf_smart_meter_exploration import base_config, PROJECT_DIR
 
-household_data_file_path = PROJECT_DIR / config["household_data_file_path"]
-meter_data_merged_file_path = PROJECT_DIR / config["meter_data_merged_file_path"]
+household_data_file_path = PROJECT_DIR / base_config["household_data_file_path"]
+meter_data_merged_file_path = PROJECT_DIR / base_config["meter_data_merged_file_path"]
 
 
 def get_household_data():

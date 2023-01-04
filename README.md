@@ -28,7 +28,7 @@ As k-means clustering is being applied, we need to determine sensible values for
 - Run `direnv allow`;
 - Activate conda environment: `conda activate asf_smart_meter_exploration`
 - Download the data:
-  - `make inputs-pull` will pull the zipped data from S3 and put it in `/inputs` - you can either unzip it manually or just run the scripts in `getters` which will do it automatically
+  - `make inputs-pull` will pull the zipped data from S3 and put it in `/inputs` (the scripts in `getters` will unzip it automatically)
   - Alternatively, download the data from [Kaggle](https://www.kaggle.com/datasets/jeanmidev/smart-meters-in-london)
 - Perform additional setup in order to save plots:
   - Follow the instructions [here](https://github.com/altair-viz/altair_saver/#nodejs)
@@ -84,3 +84,4 @@ outputs/
 <small><p>Project based on <a target="_blank" href="https://github.com/nestauk/ds-cookiecutter">Nesta's data science project template</a>
 (<a href="http://nestauk.github.io/ds-cookiecutter">Read the docs here</a>).
 </small>
+```

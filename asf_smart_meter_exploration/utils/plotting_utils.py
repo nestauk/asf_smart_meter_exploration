@@ -10,10 +10,19 @@ import matplotlib.patheffects as pe
 import matplotlib.ticker as mtick
 import datetime
 
-from asf_smart_meter_exploration import config, PROJECT_DIR
+from asf_smart_meter_exploration import base_config, PROJECT_DIR
 
-cluster_plot_folder_path = PROJECT_DIR / config["cluster_plot_folder_path"]
-plot_suffix = config["plot_suffix"]
+cluster_plot_folder_path = PROJECT_DIR / base_config["cluster_plot_folder_path"]
+inertia_plot_folder_path = PROJECT_DIR / base_config["inertia_plot_folder_path"]
+plot_suffix = base_config["plot_suffix"]
+
+plot_width = base_config["plot_width"]
+plot_height = base_config["plot_height"]
+plot_axis_labelfontsize = base_config["plot_axis_labelfontsize"]
+plot_axis_titlefontsize = base_config["plot_axis_titlefontsize"]
+plot_legend_labelfontsize = base_config["plot_legend_labelfontsize"]
+plot_legend_titlefontsize = base_config["plot_legend_titlefontsize"]
+plot_colourscheme = base_config["plot_colourscheme"]
 
 
 def set_plot_properties(chart):
@@ -26,10 +35,15 @@ def set_plot_properties(chart):
         alt.Chart: Chart with adjusted properties.
     """
     return (
-        chart.properties(width=800, height=300)
-        .configure_axis(labelFontSize=20, titleFontSize=20)
-        .configure_legend(titleFontSize=18, labelFontSize=15)
-        .configure_range(category={"scheme": "dark2"})
+        chart.properties(width=plot_width, height=plot_height)
+        .configure_axis(
+            labelFontSize=plot_axis_labelfontsize, titleFontSize=plot_axis_titlefontsize
+        )
+        .configure_legend(
+            labelFontSize=plot_legend_labelfontsize,
+            titleFontSize=plot_legend_titlefontsize,
+        )
+        .configure_range(category={"scheme": plot_colourscheme})
     )
 
 
@@ -90,7 +104,6 @@ def plot_observations_and_clusters(
         ax.yaxis.set_major_formatter(mtick.PercentFormatter(1, decimals=0))
 
     ax.set_xticks(["00:00:00", "06:00:00", "12:00:00", "18:00:00"])
-    ax.locator_params(axis="y", nbins=4)
 
     plt.savefig(
         cluster_plot_folder_path / (filename_infix + "_observations" + plot_suffix),
@@ -99,24 +112,23 @@ def plot_observations_and_clusters(
     plt.clf()
 
 
-def plot_cluster_counts(data, clusters, filename_infix):
+def plot_cluster_counts(clusters, filename_infix):
     """Produce bar chart of numbers of households in each cluster.
 
     Args:
-        data (pd.DataFrame): Household usage data.
         clusters (list): Cluster designations.
         filename_infix (str): Description of variant (e.g. "normalised_usage").
             Appears in filename.
     """
-    data["cluster"] = clusters
-    counts = data["cluster"].value_counts().reset_index(name="count")
+    clusters = pd.DataFrame(clusters, columns=["cluster"])
+    counts = clusters.value_counts().reset_index(name="count")
 
     counts_plot = (
         alt.Chart(counts)
         .mark_bar()
         .encode(
             x=alt.X("count", title="Number of households"),
-            y=alt.Y("index:N", sort="ascending", title="Cluster"),
+            y=alt.Y("cluster:N", sort="ascending", title="Cluster"),
         )
     )
 
@@ -227,3 +239,18 @@ def plot_acorn_cluster_distribution(merged_data, filename_infix):
     acorn_plot.save(
         cluster_plot_folder_path / (filename_infix + "_acorn" + plot_suffix)
     )
+
+
+def plot_inertias(inertias, filename):
+    """Plot inertia (elbow plot) for each k.
+
+    Args:
+        inertias (list): List of inertias.
+        filename (str): Filename to save plot to.
+    """
+    plt.plot(range(1, len(inertias) + 1), inertias)
+    plt.xlabel("Number of clusters")
+    plt.ylabel("Within-cluster sum of squared errors")
+    plt.title("Inertia plot for " + filename)
+    plt.savefig(inertia_plot_folder_path / (filename + "_inertia" + plot_suffix))
+    plt.clf()

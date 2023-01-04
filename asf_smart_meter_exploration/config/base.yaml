@@ -6,3 +6,12 @@ inertia_plot_folder_path: "outputs/figures/inertia/"
 cluster_plot_folder_path: "outputs/figures/clusters/"
 plot_suffix: ".png"
 random_state: 0
+
+# plot parameters
+plot_width: 800
+plot_height: 300
+plot_axis_labelfontsize: 20
+plot_axis_titlefontsize: 20
+plot_legend_labelfontsize: 15
+plot_legend_titlefontsize: 18
+plot_colourscheme: "dark2"
