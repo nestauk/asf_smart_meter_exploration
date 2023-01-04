@@ -67,14 +67,13 @@ outputs/
 
 ```mermaid
   graph TD;
-      getters/process_daw_data.py;
+      getters/process_raw_data.py;
       getters/get_processed_data.py-->pipeline/data_aggregation.py;
       pipeline/data_aggregation.py-->analysis/clustering.py;
       utils/clustering_utils.py-->analysis/inertia_plots.py;
       utils/clustering_utils.py-->analysis/clustering.py;
       utils/plotting_utils.py-->analysis/clustering.py;
       analysis/clustering.py-->analysis/inertia_plots.py;
-```
 
 ## Contributor guidelines
 
