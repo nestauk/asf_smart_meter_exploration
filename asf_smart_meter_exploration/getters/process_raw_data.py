@@ -31,7 +31,7 @@ def produce_all_properties_df():
                 zip_ref.extractall("inputs")
             print("Unzipped!")
 
-    halfhourly_dataset = []
+    halfhourly_dataset = pd.DataFrame()
 
     for file_name in tqdm.tqdm(os.listdir(meter_data_folder_path)):
         df_temp = pd.read_csv(
