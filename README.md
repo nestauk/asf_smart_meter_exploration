@@ -19,9 +19,14 @@ As k-means clustering is being applied, we need to determine sensible values for
 
 - Meet the data science cookiecutter [requirements](http://nestauk.github.io/ds-cookiecutter/quickstart), in brief:
   - Install: `direnv` and `conda`
+- Clone the repo: `git clone git@github.com:nestauk/asf_smart_meter_exploration.git`
+- Navigate to the repo folder
+- Checkout the correct branch if not working on `dev`
 - Run `make install` to configure the development environment:
   - Setup the conda environment
   - Configure `pre-commit`
+- Run `direnv allow`;
+- Activate conda environment: `conda activate asf_smart_meter_exploration`
 - Download the data:
   - `make inputs-pull` will pull the zipped data from S3 and put it in `/inputs` - you can either unzip it manually or just run the scripts in `getters` which will do it automatically
   - Alternatively, download the data from [Kaggle](https://www.kaggle.com/datasets/jeanmidev/smart-meters-in-london)
