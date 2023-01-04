@@ -43,9 +43,7 @@ def produce_all_properties_df():
         df_temp["file_name"] = file_name.split(".")[0]
         df_temp = df_temp.replace("Null", np.nan).dropna()
         df_temp["energy(kWh/hh)"] = df_temp["energy(kWh/hh)"].astype("float")
-        halfhourly_dataset.append(df_temp)
-
-    halfhourly_dataset = pd.concat(halfhourly_dataset, axis=0)
+        halfhourly_dataset = pd.concat([halfhourly_dataset, df_temp])
 
     # Structure dataframe so that index is timestamps and columns are households
     df_output = (
