@@ -14,6 +14,9 @@ from asf_smart_meter_exploration import base_config, PROJECT_DIR
 
 meter_data_zip_path = PROJECT_DIR / base_config["meter_data_zip_path"]
 meter_data_folder_path = PROJECT_DIR / base_config["meter_data_folder_path"]
+meter_data_merged_folder_path = (
+    PROJECT_DIR / base_config["meter_data_merged_folder_path"]
+)
 meter_data_merged_file_path = PROJECT_DIR / base_config["meter_data_merged_file_path"]
 
 
@@ -57,6 +60,9 @@ def produce_all_properties_df():
         .mean(numeric_only=True)
         .unstack()
     )
+    if not os.path.isdir(meter_data_merged_folder_path):
+        os.mkdir(meter_data_merged_folder_path)
+
     df_output.to_csv(meter_data_merged_file_path)
 
 
