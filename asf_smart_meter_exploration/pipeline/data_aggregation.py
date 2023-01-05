@@ -6,20 +6,14 @@ Functions to process household smart meter data into various formats for cluster
 import numpy as np
 import holidays
 
-from asf_smart_meter_exploration.getters.get_processed_data import (
-    get_meter_data,
-    get_household_data,
-)
+from asf_smart_meter_exploration.getters.get_processed_data import get_household_data
 
 
-meter_data = get_meter_data()
-
-
-def get_average_usage(data=meter_data, normalised=False, cumulative=False):
+def get_average_usage(data, normalised=False, cumulative=False):
     """For each household, get average usage for each half-hour of the day.
 
     Args:
-        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp. Defaults to meter_data.
+        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp.
         normalised (bool, optional): Whether to normalise the readings and return
             the proportion used in each half-hour rather than the amount in kWh.
             Defaults to False.
@@ -42,11 +36,11 @@ def get_average_usage(data=meter_data, normalised=False, cumulative=False):
     return hh_averages
 
 
-def get_average_usage_daytypes(data=meter_data, normalise=False):
+def get_average_usage_daytypes(data, normalise=False):
     """For each household, get average usage split by "day type" (weekday or weekend).
 
     Args:
-        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp. Defaults to meter_data.
+        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp.
         normalised (bool, optional): Whether to normalise the readings and return
             the proportion used in each half-hour rather than the amount in kWh.
             Values are normalised within each day type. Defaults to False.
@@ -92,11 +86,12 @@ def get_average_usage_daytypes(data=meter_data, normalise=False):
         return data_daytypes
 
 
-def get_daytype_diff(type="diff"):
+def get_daytype_diff(data, type="diff"):
     """For each household, get difference or ratio between weekend and weekday usage
     for each half-hour of the day. ("Weekend" also includes bank holidays.)
 
     Args:
+        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp.
         type (str, optional): Whether to calculate difference ("diff") or ratio ("ratio").
         "diff" is weekend - weekday, "ratio" is weekend / weekday.
         Defaults to "diff".
@@ -105,7 +100,7 @@ def get_daytype_diff(type="diff"):
         pd.DataFrame: Average differences/ratios between usage on weekends and weekdays.
     """
 
-    data_daytypes = get_average_usage_daytypes()
+    data_daytypes = get_average_usage_daytypes(data=data)
 
     if type == "diff":
         # True = "weekend or bank holiday"
@@ -120,12 +115,12 @@ def get_daytype_diff(type="diff"):
         raise ValueError("Type must be one of 'diff' or 'ratio'.")
 
 
-def get_season_diff(data=meter_data, season_1="winter", season_2="summer"):
+def get_season_diff(data, season_1="winter", season_2="summer"):
     """For each household, get difference between usage in two specified seasons for each half-hour.
     Calculation performed is (mean in season_1) - (mean in season_2).
 
     Args:
-        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp. Defaults to meter_data.
+        data (pd.DataFrame, optional): Dataset of meter readings, indexed by timestamp.
         season_1 (str, optional): Season, i.e. "winter", "spring", "summer" or "autumn".
             Defaults to "winter".
         season_2 (str, optional): Season to subtract. Can also pass "spring and autumn" to get

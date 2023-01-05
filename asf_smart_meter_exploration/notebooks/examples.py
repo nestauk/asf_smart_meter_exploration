@@ -26,30 +26,22 @@ os.chdir("../..")
 import pandas as pd
 
 # %%
-from asf_smart_meter_exploration import base_config, PROJECT_DIR
-
-from asf_smart_meter_exploration.pipeline.process_raw_data import (
-    produce_all_properties_df,
+from asf_smart_meter_exploration.getters.get_processed_data import (
+    get_meter_data,
 )
 from asf_smart_meter_exploration.analysis.inertia_plots import produce_inertia_plots
 from asf_smart_meter_exploration.analysis.clustering import (
     cluster_and_plot_all_variants,
 )
 
-# %%
-meter_data_merged_file_path = PROJECT_DIR / base_config["meter_data_merged_file_path"]
-
 # %% [markdown]
 # ## Examples
 
 # %% [markdown]
-# Process the raw data to produce half-hourly meter readings for each household (takes ~15 mins):
+# Get processed meter data (if processed file is not present, this will process the raw data which takes ~15 mins):
 
 # %%
-produce_all_properties_df()
-
-# %%
-pd.read_csv(meter_data_merged_file_path)
+get_meter_data()
 
 # %% [markdown]
 # Produce inertia plots for all clustering variants (results can be seen in `outputs/figures/inertia/`):

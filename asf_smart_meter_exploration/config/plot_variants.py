@@ -6,6 +6,10 @@ Dictionary defining the variants to cluster and plot.
 from asf_smart_meter_exploration.utils.plotting_utils import *
 from asf_smart_meter_exploration.pipeline.data_aggregation import *
 
+from asf_smart_meter_exploration.getters.get_processed_data import get_meter_data
+
+meter_data = get_meter_data()
+
 # Dictionary of variants to cluster and plot.
 # "df" is the smart meter dataframe, "k" is the number of clusters,
 # and see docs for `plot_observations_and_clusters` (in `utils/plotting_utils.py`)
@@ -14,7 +18,7 @@ from asf_smart_meter_exploration.pipeline.data_aggregation import *
 # `analysis/inertia_plots.py`.
 variants_dict = {
     "total_usage": {
-        "df": get_average_usage(),
+        "df": get_average_usage(meter_data),
         "k": 4,
         "normalised": False,
         "ylabel": "Electricity usage (kWh)",
@@ -22,7 +26,7 @@ variants_dict = {
         "ymax": 4,
     },
     "normalised_usage": {
-        "df": get_average_usage(normalised=True),
+        "df": get_average_usage(meter_data, normalised=True),
         "k": 4,
         "normalised": True,
         "ylabel": "Electricity usage (normalised)",
@@ -30,7 +34,7 @@ variants_dict = {
         "ymax": 0.2,
     },
     "weekday_weekend_diff": {
-        "df": get_daytype_diff(),
+        "df": get_daytype_diff(meter_data),
         "k": 3,
         "normalised": False,
         "ylabel": "Mean weekend usage - mean weekday usage (kWh)",
@@ -38,7 +42,7 @@ variants_dict = {
         "ymax": 1,
     },
     "weekday_weekend_ratio": {
-        "df": get_daytype_diff(type="ratio"),
+        "df": get_daytype_diff(meter_data, type="ratio"),
         "k": 2,
         "normalised": False,
         "ylabel": "Mean weekend usage / mean weekday usage",
@@ -46,7 +50,7 @@ variants_dict = {
         "ymax": 10,
     },
     "winter_summer_diff": {
-        "df": get_season_diff(),
+        "df": get_season_diff(meter_data),
         "k": 4,
         "normalised": False,
         "ylabel": "Mean winter usage - mean summer usage (kWh)",
@@ -54,7 +58,9 @@ variants_dict = {
         "ymax": 4,
     },
     "summer_rest_diff": {
-        "df": get_season_diff(season_1="summer", season_2="spring and autumn"),
+        "df": get_season_diff(
+            meter_data, season_1="summer", season_2="spring and autumn"
+        ),
         "k": 4,
         "normalised": False,
         "ylabel": "Mean summer usage - mean spring/autumn usage (kWh)",
@@ -62,7 +68,9 @@ variants_dict = {
         "ymax": 1,
     },
     "summer_rest_diff": {
-        "df": get_season_diff(season_1="summer", season_2="spring and autumn"),
+        "df": get_season_diff(
+            meter_data, season_1="summer", season_2="spring and autumn"
+        ),
         "k": 4,
         "normalised": False,
         "ylabel": "Mean summer usage - mean spring/autumn usage (kWh)",
@@ -70,7 +78,7 @@ variants_dict = {
         "ymax": 1,
     },
     "cumulative_normalised": {
-        "df": get_average_usage(normalised=True, cumulative=True),
+        "df": get_average_usage(meter_data, normalised=True, cumulative=True),
         "k": 3,
         "normalised": True,
         "ylabel": "Cumulative normalised daily mean usage",
