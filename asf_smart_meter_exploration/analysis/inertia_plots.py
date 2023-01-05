@@ -8,7 +8,8 @@ import os
 
 from asf_smart_meter_exploration import PROJECT_DIR, base_config
 from asf_smart_meter_exploration.config.plot_variants import variants_dict
-from asf_smart_meter_exploration.utils.clustering_utils import inertia_plot
+from asf_smart_meter_exploration.utils.clustering_utils import clustering_inertias
+from asf_smart_meter_exploration.utils.plotting_utils import plot_inertias
 
 inertia_plot_folder_path = PROJECT_DIR / base_config["inertia_plot_folder_path"]
 
@@ -20,7 +21,8 @@ def produce_inertia_plots():
         os.mkdir(inertia_plot_folder_path)
 
     for key in variants_dict.keys():
-        inertia_plot(variants_dict[key]["df"], filename=key)
+        inertias = clustering_inertias(variants_dict[key]["df"])
+        plot_inertias(inertias, filename=key)
 
 
 if __name__ == "__main__":

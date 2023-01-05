@@ -74,7 +74,11 @@ outputs/
       utils/clustering_utils.py-->analysis/inertia_plots.py;
       utils/clustering_utils.py-->analysis/clustering.py;
       utils/plotting_utils.py-->analysis/clustering.py;
-      analysis/clustering.py-->analysis/inertia_plots.py;
+      pipeline/data_aggregation.py-->config/plot_variants.py;
+      config/plot_variants.py-->analysis/inertia_plots.py;
+      utils/plotting_utils.py-->config/plot_variants.py;
+      config/plot_variants.py-->analysis/clustering.py;
+      utils/plotting_utils.py-->analysis/inertia_plots.py;
 ```
 
 ## Contributor guidelines

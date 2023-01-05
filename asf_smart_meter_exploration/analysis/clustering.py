@@ -6,6 +6,7 @@ tariffs / Acorn groups in each cluster are produced and saved.
 """
 
 import os
+import warnings
 
 from asf_smart_meter_exploration import PROJECT_DIR, base_config
 from asf_smart_meter_exploration.utils.clustering_utils import run_clustering
@@ -14,6 +15,8 @@ from asf_smart_meter_exploration.pipeline.data_aggregation import merge_househol
 from asf_smart_meter_exploration.utils.plotting_utils import *
 
 cluster_plot_folder_path = PROJECT_DIR / base_config["cluster_plot_folder_path"]
+
+warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
 def cluster_and_plot(type):
@@ -60,6 +63,11 @@ def cluster_and_plot(type):
         plot_acorn_cluster_distribution(merged_df, filename_infix=type)
 
 
-if __name__ == "__main__":
+def cluster_and_plot_all_variants():
+    """Cluster and plot all variants in variants_dict."""
     for type in variants_dict.keys():
         cluster_and_plot(type)
+
+
+if __name__ == "__main__":
+    cluster_and_plot_all_variants()
