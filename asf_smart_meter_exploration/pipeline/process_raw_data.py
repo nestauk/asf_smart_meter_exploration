@@ -19,7 +19,7 @@ meter_data_merged_file_path = PROJECT_DIR / base_config["meter_data_merged_file_
 
 def unzip_raw_data():
     """Unzips the raw data file."""
-    if not os.path.isdir(meter_data_zip_path):
+    if not os.path.isfile(meter_data_zip_path):
         raise FileNotFoundError(
             "Zip file not found. Please check file location or redownload data from S3."
         )
@@ -47,7 +47,7 @@ def produce_all_properties_df():
             low_memory=False,
         )
         df_temp["file_name"] = file_name.split(".")[0]
-        df_temp = df_temp.replace("Null", np.nan)
+        df_temp = df_temp.replace("Null", np.nan).dropna()
         df_temp["energy(kWh/hh)"] = df_temp["energy(kWh/hh)"].astype("float")
         halfhourly_dataset = pd.concat([halfhourly_dataset, df_temp])
 

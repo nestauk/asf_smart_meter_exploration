@@ -31,7 +31,7 @@ As k-means clustering is being applied, we need to determine sensible values for
   - `make inputs-pull` will pull the zipped data from S3 and put it in `/inputs` (the scripts in `getters` will unzip it automatically)
   - Alternatively, download the data from [Kaggle](https://www.kaggle.com/datasets/jeanmidev/smart-meters-in-london)
 - Perform additional setup in order to save plots:
-  - Follow the instructions [here](https://github.com/altair-viz/altair_saver/#nodejs)
+  - Follow the instructions [here](https://github.com/altair-viz/altair_saver/#nodejs) - you may just need to run `conda install -c conda-forge vega-cli vega-lite-cli`
 
 ## Skeleton folder structure
 
@@ -42,6 +42,7 @@ asf_smart_meter_exploration/
 │  ├─ inertia_plots.py - produces inertia plots for determining optimal k in k-means clustering
 ├─ config/
 │  ├─ base.yaml - hyperparameters, file paths
+│  ├─ plot_variants.py - dictionary of clustering variants to plot
 ├─ getters/
 │  ├─ get_processed_data.py - getters for processed smart meter / household data
 │  ├─ process_raw_data.py - functions to process raw data
@@ -67,13 +68,14 @@ outputs/
 
 ```mermaid
   graph TD;
-      getters/process_raw_data.py;
+      pipeline/process_raw_data.py-->getters/get_processed_data.py;
       getters/get_processed_data.py-->pipeline/data_aggregation.py;
       pipeline/data_aggregation.py-->analysis/clustering.py;
       utils/clustering_utils.py-->analysis/inertia_plots.py;
       utils/clustering_utils.py-->analysis/clustering.py;
       utils/plotting_utils.py-->analysis/clustering.py;
       analysis/clustering.py-->analysis/inertia_plots.py;
+```
 
 ## Contributor guidelines
 
@@ -84,4 +86,7 @@ outputs/
 <small><p>Project based on <a target="_blank" href="https://github.com/nestauk/ds-cookiecutter">Nesta's data science project template</a>
 (<a href="http://nestauk.github.io/ds-cookiecutter">Read the docs here</a>).
 </small>
+
+```
+
 ```

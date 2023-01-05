@@ -5,10 +5,15 @@ For each cluster, plots of the counts and the distribution of
 tariffs / Acorn groups in each cluster are produced and saved.
 """
 
+import os
+
+from asf_smart_meter_exploration import PROJECT_DIR, base_config
 from asf_smart_meter_exploration.utils.clustering_utils import run_clustering
 from asf_smart_meter_exploration.config.plot_variants import variants_dict
 from asf_smart_meter_exploration.pipeline.data_aggregation import merge_household_data
 from asf_smart_meter_exploration.utils.plotting_utils import *
+
+cluster_plot_folder_path = PROJECT_DIR / base_config["cluster_plot_folder_path"]
 
 
 def cluster_and_plot(type):
@@ -29,6 +34,9 @@ def cluster_and_plot(type):
         k = type_dict["k"]
 
         clusters = run_clustering(df, k)
+
+        if not os.path.isdir(cluster_plot_folder_path):
+            os.mkdir(cluster_plot_folder_path)
 
         # Create and save cluster plots using the parameters from the dict
         # Use variant name as part of filename
