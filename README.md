@@ -46,7 +46,8 @@ asf_smart_meter_exploration/
 ├─ getters/
 │  ├─ get_processed_data.py - getters for processed smart meter / household data
 │  ├─ process_raw_data.py - functions to process raw data
-├─ notebooks/ - currently empty
+├─ notebooks/
+│  ├─ examples.py - notebook to demonstrate key operations (loading data, producing plots)
 ├─ pipeline/
 │  ├─ data_aggregation.py - functions to process smart meter data into various formats for clustering
 ├─ utils/
