@@ -61,7 +61,7 @@ def produce_all_properties_df():
         .unstack()
     )
     if not os.path.isdir(meter_data_merged_folder_path):
-        os.mkdir(meter_data_merged_folder_path)
+        os.makedirs(meter_data_merged_folder_path)
 
     df_output.to_csv(meter_data_merged_file_path)
 

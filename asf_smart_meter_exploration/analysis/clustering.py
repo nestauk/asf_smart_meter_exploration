@@ -39,7 +39,7 @@ def cluster_and_plot(type):
         clusters = run_clustering(df, k)
 
         if not os.path.isdir(cluster_plot_folder_path):
-            os.mkdir(cluster_plot_folder_path)
+            os.makedirs(cluster_plot_folder_path)
 
         # Create and save cluster plots using the parameters from the dict
         # Use variant name as part of filename

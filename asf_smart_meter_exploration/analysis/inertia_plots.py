@@ -18,7 +18,7 @@ def produce_inertia_plots():
     """Generate inertia plots for variants specified in variants_dict."""
 
     if not os.path.isdir(inertia_plot_folder_path):
-        os.mkdir(inertia_plot_folder_path)
+        os.makedirs(inertia_plot_folder_path)
 
     for key in variants_dict.keys():
         inertias = clustering_inertias(variants_dict[key]["df"])
