@@ -1,0 +1,18 @@
+meter_data_zip_path: "inputs/halfhourly_dataset.zip"
+meter_data_folder_path: "inputs/halfhourly_dataset/"
+household_data_file_path: "inputs/household_info.csv"
+meter_data_merged_folder_path: "outputs/data/"
+meter_data_merged_file_path: "outputs/data/electricity_data.csv"
+inertia_plot_folder_path: "outputs/figures/inertia/"
+cluster_plot_folder_path: "outputs/figures/clusters/"
+plot_suffix: ".png"
+random_state: 0
+
+# plot parameters
+plot_width: 800
+plot_height: 300
+plot_axis_labelfontsize: 20
+plot_axis_titlefontsize: 20
+plot_legend_labelfontsize: 15
+plot_legend_titlefontsize: 18
+plot_colourscheme: "dark2"

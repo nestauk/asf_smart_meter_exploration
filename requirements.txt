@@ -1,0 +1,9 @@
+pandas
+numpy
+tqdm
+altair
+scikit-learn
+matplotlib
+holidays
+altair_saver
+selenium==4.2.0

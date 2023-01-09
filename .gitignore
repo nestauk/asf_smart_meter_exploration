@@ -110,6 +110,8 @@ target/
 !/outputs/data/*.md
 /outputs/models/*
 !/outputs/models/*.md
+/outputs/figures/clusters/*.png
+/outputs/figures/inertia/*.png
 
 # Mac OS-specific storage files
 .DS_Store
